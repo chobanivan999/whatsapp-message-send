@@ -48,7 +48,7 @@ def banks():
 
     myresult = mycursor.fetchall()
 
-    if len(myresult) == 0:
+    if myresult[0][0] == 0:
         # Clear table
         mycursor.execute("DELETE FROM banks")
         mydb.commit()
@@ -74,28 +74,44 @@ def banks():
             'Singapura-Finance': 'https://www.singapurafinance.com.sg/img/logo.png',
             'sbi': 'https://sbi.co.in/o/SBI-Theme/images/custom/logo.png'
         }
+        banknames = {
+            'mbb': 'Maybank',
+            'ocbc': 'OCBC',
+            'dbs': 'DBS',
+            'hsbc': 'HSBC',
+            'citibank': 'Citibank',
+            'scb': 'Standard Chartered',
+            'cimb': 'CIMB Bank',
+            'boc': 'Bank of China',
+            'hlf': 'Hong Leong Finance',
+            'Singapura-Finance': 'Singapura Finance Ltd',
+            'sbi': 'State Bank of India'
+        }
 
         for row in rows:
-            img = banklogos[row.img['src'].split("/")[-1].split(".")[0]]
+            bankkey = row.img['src'].split("/")[-1].split(".")[0]
+            name = banknames[bankkey]
+            img = banklogos[bankkey]
             ratetype = row.find(True, {"class":["package-type"]}).text.strip()
             lockin = row.find(True, {"class":["package-lockin"]}).text.strip()
             rate = row.find(True, {"class":["package-rate"]}).text.strip().split("\n")
-            rate = ' '.join([item.strip() for item in rate])
+            rate = '<br>'.join([item.strip() for item in rate if item != "Interest Rate"])
             installment = row.find(True, {"class":["box__instalment"]}).text.strip().split("\n")
-            installment = ' '.join([item.strip() for item in installment if item != "Monthly Instalments"])
+            installment = '<br>'.join([item.strip() for item in installment if item != "Monthly Instalments"])
             content = {
                     "ratetype": ratetype,
                     "lockin": lockin,
                     "rate": rate,
                     "installment": installment
                 }
-            mycursor.execute("INSERT INTO banks (image, content) VALUES (%s, %s)", (img, json.dumps(content)))
+            mycursor.execute("INSERT INTO banks (name, image, content) VALUES (%s, %s, %s)", (name, img, json.dumps(content)))
         mydb.commit()
 
-    mycursor.execute("SELECT image, content FROM banks")
+    mycursor.execute("SELECT name, image, content FROM banks")
     myresult = mycursor.fetchall()
-    print(myresult)
     mydb.close()
+
+    return list(myresult)
 
 if __name__ == '__main__':
     app.run()
