@@ -14,6 +14,7 @@ client = Client(account_sid, auth_token)
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/send', methods=['POST'])
 def send():
     msg = request.values.get('Body', '')
