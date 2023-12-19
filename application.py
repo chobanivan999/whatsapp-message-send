@@ -43,10 +43,10 @@ def banks():
     try:
         # Connect DB
         mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="helper-mortgage-option"
+        host="helper-mortgage-app-server.mysql.database.azure.com",
+        user="vwyqarxcyy",
+        password="2UDN1QS88XH71VJK$",
+        database="helper-mortgage-option-db"
         )
         mycursor = mydb.cursor()
 
