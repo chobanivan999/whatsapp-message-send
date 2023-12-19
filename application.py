@@ -29,10 +29,11 @@ def send():
                 to = 'whatsapp:' + phone
             )
             print(phone, ": success")
+            return "Sent"
         except Exception as e:
             print(phone, str(e))
+            return str(e)
 
-    return "Sent"
 
 @app.route('/banks', methods=['GET'])
 def banks():
