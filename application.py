@@ -13,6 +13,9 @@ auth_token = 'a9c43f4aa6865352ad485336976a48ed'
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/")
+def index():
+    return "<!doctype html><html><head><title>WhatsApp Messaging App</title></head><body><h1>WhatsApp Messaging App is Running!</h1></body></html>"
 
 @app.route('/send', methods=['POST'])
 def send():
