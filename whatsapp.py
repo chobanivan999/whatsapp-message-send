@@ -9,7 +9,6 @@ from flask_cors import CORS
 # Configuring Twilio Credentials and Logging in
 account_sid = 'ACc732f5a72960c592f6af8bf4a2bc34ab'
 auth_token = 'a9c43f4aa6865352ad485336976a48ed'
-client = Client(account_sid, auth_token)
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +16,7 @@ CORS(app)
 
 @app.route('/send', methods=['POST'])
 def send():
+    client = Client(account_sid, auth_token)
     msg = request.values.get('Body', '')
     phones = request.values.get('To', '')
     phones = phones.split(",")
@@ -105,7 +105,10 @@ def banks():
                     "rate": rate,
                     "installment": installment
                 }
-            mycursor.execute("INSERT INTO banks (name, image, content) VALUES (%s, %s, %s)", (name, img, json.dumps(content)))
+            mycursor.execute("SELECT name, image, content FROM banks WHERE name=%s AND image=%s AND content=%s", (name, img, json.dumps(content)))
+            myresult = mycursor.fetchall()
+            if len(myresult) == 0:
+                mycursor.execute("INSERT INTO banks (name, image, content) VALUES (%s, %s, %s)", (name, img, json.dumps(content)))
         mydb.commit()
 
     mycursor.execute("SELECT name, image, content FROM banks")
