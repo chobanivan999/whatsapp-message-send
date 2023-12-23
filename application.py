@@ -40,13 +40,18 @@ def send():
 
 @app.route('/banks', methods=['GET'])
 def banks():
+    res = {}
     try:
         # Connect DB
         mydb = mysql.connector.connect(
-        host="helper-mortgage-app-server.mysql.database.azure.com",
-        user="vwyqarxcyy",
-        password="2UDN1QS88XH71VJK$",
-        database="helper-mortgage-option-db"
+        # host="helper-mortgage-app-server.mysql.database.azure.com",
+        # user="vwyqarxcyy",
+        # password="2UDN1QS88XH71VJK$",
+        # database="helper-mortgage-option-db"
+        host="localhost",
+        user="root",
+        password="",
+        database="helper-mortgage-option"
         )
         mycursor = mydb.cursor()
 
@@ -78,7 +83,9 @@ def banks():
                 'boc': 'https://www.boc.cn/en/images/bankofchina_LOGO.gif',
                 'hlf': 'https://www.hlf.com.sg/assets/images/home/logo.png',
                 'Singapura-Finance': 'https://www.singapurafinance.com.sg/img/logo.png',
-                'sbi': 'https://sbi.co.in/o/SBI-Theme/images/custom/logo.png'
+                'sbi': 'https://sbi.co.in/o/SBI-Theme/images/custom/logo.png',
+                'uob': 'https://www.uob.com.sg/assets/iwov-resources/assets/BrandAssets/UOB_Logo.svg',
+                'rhb': 'https://www.rhbgroup.com/images/global/logo-mobile_default.png'
             }
             banknames = {
                 'mbb': 'Maybank',
@@ -91,7 +98,9 @@ def banks():
                 'boc': 'Bank of China',
                 'hlf': 'Hong Leong Finance',
                 'Singapura-Finance': 'Singapura Finance Ltd',
-                'sbi': 'State Bank of India'
+                'sbi': 'State Bank of India',
+                'uob': 'UOB',
+                'rhb': 'RHB'
             }
 
             for row in rows:
@@ -119,10 +128,14 @@ def banks():
         mycursor.execute("SELECT name, image, content FROM banks")
         myresult = mycursor.fetchall()
         mydb.close()
-
-        return list(myresult)
+        
+        res["status"] = "success"
+        res["data"] = list(myresult)
+        return res
     except Exception as e:
-        return str(e)
+        res["status"] = "fail"
+        res["data"] = str(e)
+        return res
 
 if __name__ == '__main__':
     app.run()
