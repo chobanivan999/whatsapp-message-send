@@ -19,23 +19,23 @@ def index():
 
 @app.route('/send', methods=['POST'])
 def send():
-    client = Client(account_sid, auth_token)
-    msg = request.values.get('Body', '')
-    phones = request.values.get('To', '')
-    phones = phones.split(",")
-    print(phones)
-    for phone in phones:
-        try:
-            client.messages.create(
-                from_ = 'whatsapp:+601119083609',
-                body = msg,
-                to = 'whatsapp:' + phone
-            )
-            print(phone, ": success")
-            return "Sent"
-        except Exception as e:
-            print(phone, str(e))
-            return str(e)
+    try:
+        client = Client(account_sid, auth_token)
+        msg = request.values.get('Body', '')
+        phones = request.values.get('To', '')
+        phones = phones.split(",")
+        print(phones)
+        for phone in phones:
+                client.messages.create(
+                    from_ = 'whatsapp:+601119083609',
+                    body = msg,
+                    to = 'whatsapp:' + phone
+                )
+                print(phone, ": success")
+        return "Sent"
+    except Exception as e:
+        print(phone, str(e))
+        return str(e)
 
 
 @app.route('/banks', methods=['GET'])
