@@ -30,7 +30,7 @@ def send():
                 body = msg,
                 to = 'whatsapp:' + phone
             )
-        return res
+        return "sent"
     except Exception as e:
         print(phone, str(e))
         return str(e)
