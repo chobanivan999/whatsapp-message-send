@@ -27,12 +27,12 @@ def send():
         print(phones)
         resarr = []
         for phone in phones:
-                res = client.messages.create(
-                    from_ = 'whatsapp:+601119083609',
-                    body = msg,
-                    to = 'whatsapp:' + phone
-                )
-                resarr.append(res)
+            res = client.messages.create(
+                from_ = 'whatsapp:+601119083609',
+                body = msg,
+                to = 'whatsapp:' + phone
+            )
+            resarr.append(res)
         return resarr
     except Exception as e:
         print(phone, str(e))
