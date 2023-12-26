@@ -24,16 +24,13 @@ def send():
         msg = request.values.get('Body', '')
         phones = request.values.get('To', '')
         phones = phones.split(",")
-        print(phones)
-        resarr = []
         for phone in phones:
             res = client.messages.create(
                 from_ = 'whatsapp:+601119083609',
                 body = msg,
                 to = 'whatsapp:' + phone
             )
-            resarr.append(res)
-        return resarr
+        return res
     except Exception as e:
         print(phone, str(e))
         return str(e)
